@@ -5,6 +5,7 @@
 
 using namespace cv;
 
+#define LOOP_RATE_IN_HERTZ 50
 
 int main(int argc, char** argv)
 {
@@ -39,16 +40,24 @@ int main(int argc, char** argv)
 
   CameraReader reader;
 
+
   // Loop starts here:
   // loop rate value is set in Hz
-  ros::Rate loop_rate(1);
+
+  ROS_INFO("FPS: %f", reader.getVideoCapture().get(CV_CAP_PROP_FPS));
+  //ROS_INFO("Buffer size: %f", reader.getVideoCapture().get(CV_CAP_PROP_BUFFERSIZE));
+  ROS_INFO("Open up window...");
+  namedWindow("CameraFrame", WINDOW_AUTOSIZE);
+
+  ros::Rate loop_rate(LOOP_RATE_IN_HERTZ);
   while (ros::ok())
   {
     reader.readImage();
-    ROS_INFO("Open up window...");
-    namedWindow("Frame", WINDOW_AUTOSIZE);
-    imshow("Frame", reader.readImage());
-    waitKey(0);
+    //ROS_INFO("Number of frames: %f", reader.getNumberOfFrames());
+    
+    ROS_INFO("Show frame.");
+    imshow("CameraFrame", reader.readImage());
+    waitKey(1); // set to 0 for manual continuation (key-press) or specify auto-delay in milliseconds
     ROS_INFO("Showed frame.");
 
     // publish command messages on their topics
