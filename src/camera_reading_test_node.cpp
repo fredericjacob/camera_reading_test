@@ -6,6 +6,15 @@
 using namespace cv;
 
 #define LOOP_RATE_IN_HERTZ 50
+#define DRAW_GRID
+
+
+void drawGrid(Mat& mat) {
+  int width = mat.cols;
+  int height = mat.rows;
+  line(mat, Point(0, (height-1)/2), Point(width-1, (height-1)/2), Scalar(0,0,255), 3);
+  line(mat, Point((width-1)/2, 0), Point((width-1)/2, height-1), Scalar(0,0,255), 3);
+}
 
 int main(int argc, char** argv)
 {
@@ -52,10 +61,14 @@ int main(int argc, char** argv)
   ros::Rate loop_rate(LOOP_RATE_IN_HERTZ);
   while (ros::ok())
   {
-    reader.readImage();
+    //reader.readImage();
     //ROS_INFO("Number of frames: %f", reader.getNumberOfFrames());
     
     ROS_INFO("Show frame.");
+    Mat frame = reader.readImage();
+#ifdef DRAW_GRID
+    drawGrid(frame);
+#endif
     imshow("CameraFrame", reader.readImage());
     waitKey(1); // set to 0 for manual continuation (key-press) or specify auto-delay in milliseconds
     ROS_INFO("Showed frame.");
