@@ -12,8 +12,8 @@ using namespace cv;
 void drawGrid(Mat& mat) {
   int width = mat.cols;
   int height = mat.rows;
-  line(mat, Point(0, (height-1)/2), Point(width-1, (height-1)/2), Scalar(0,0,255), 3);
-  line(mat, Point((width-1)/2, 0), Point((width-1)/2, height-1), Scalar(0,0,255), 3);
+  line(mat, Point(0, (height-1)/2), Point(width-1, (height-1)/2), Scalar(0,0,255), 1);
+  line(mat, Point((width-1)/2, 0), Point((width-1)/2, height-1), Scalar(0,0,255), 1);
 }
 
 int main(int argc, char** argv)
@@ -69,7 +69,7 @@ int main(int argc, char** argv)
 #ifdef DRAW_GRID
     drawGrid(frame);
 #endif
-    imshow("CameraFrame", reader.readImage());
+    imshow("CameraFrame", frame);
     waitKey(1); // set to 0 for manual continuation (key-press) or specify auto-delay in milliseconds
     ROS_INFO("Showed frame.");
 
