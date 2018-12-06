@@ -7,12 +7,16 @@
 using namespace cv;
 
 //#define TEST_PICTURE_PATH "camera_reading_test/images/calibration_test_2.jpg"
-#define TEST_PICTURE_PATH "camera_reading_test/images/track_straight.jpg"
+//#define TEST_PICTURE_PATH "camera_reading_test/images/track_straight.jpg"
+#define TEST_PICTURE_PATH "camera_reading_test/images/track_calibration_1.jpg"
 
 
 #define USE_TEST_PICTURE
 #define LOOP_RATE_IN_HERTZ 50
 //#define DRAW_GRID
+
+#define PARAMS_1 59.0,84.0,30.0,Point(0,366),Point(632,363),Point(404,238),Point(237,237),Point(151,639),Point(488,639),Point(488,0),Point(151,0)
+#define PARAMS_2 59.0,84.0,20,Point(43,387),Point(583,383),Point(404,189),Point(234,190),Point(95,990),Point(545,990),Point(545,350),Point(95,350)
 
 
 void drawGrid(Mat& mat) {
@@ -51,16 +55,12 @@ int main(int argc, char** argv)
   
   // TODO: for more meaningful testing, move object creation in the loop
   ImageProcessor imageProcessor(frame);
-  imageProcessor.calibrateCameraImage(59.0,84.0,30.0,
-            Point(0,366),Point(632,363),Point(404,238),Point(237,237),
-            Point(151,639),Point(488,639),Point(488,0),Point(151,0)
-
-  );
+  imageProcessor.calibrateCameraImage(PARAMS_2);
 
   imshow("CameraFrame", frame);
   waitKey(0);
 
-  frame = imageProcessor.transformTo2D();
+  frame = imageProcessor.transformTo2D(640,991);
   
   ROS_INFO("Open up window...");
   //namedWindow("CameraFrame", WINDOW_AUTOSIZE);

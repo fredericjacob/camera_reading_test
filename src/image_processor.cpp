@@ -42,9 +42,9 @@ void ImageProcessor::calibrateCameraImage(double testRectWidth_cm, double testRe
     calibrated = true;
 }
 
-Mat ImageProcessor::transformTo2D() {
+Mat ImageProcessor::transformTo2D(int outputWidth, int outputHeight) {
     Mat transformMatr = getPerspectiveTransform(srcPoints,dstPoints);
-    Mat output;
+    Mat output = Mat::zeros(Size(outputWidth,outputHeight),image.type());
     warpPerspective(image, output, transformMatr, output.size()); // TODO: good idea to write back to the same image? allow a different image size than the original one?
     image = output;
     return image;

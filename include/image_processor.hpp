@@ -29,7 +29,7 @@ class ImageProcessor {
         Point2d getWorldCoordinates(Point2i imageCoordinates);
         Point2i getImageCoordinates(Point2d worldCoordinates);
 
-        Mat transformTo2D();
+        Mat transformTo2D(int outputWidth, int outputHeight);
         Mat filterColor();
 
         Mat& getImage();    // TODO: remove? getter not necessary?
