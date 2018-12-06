@@ -1,0 +1,9 @@
+## reale Koordinaten ##
+
+Abstand Fahrzeug (Schaumstoff-Teil) - Horizont (Klebestreifen): 150 cm
+Offset Papier - Fahrzeug: 20 cm
+Breite der Fahrbahn (inklusive beider Seitenstreifen): 82 cm
+
+Test-Rechteck-Höhe: 84 cm
+Test-Rechteck-Breite: 59 cm
+-> Verhältnis H/B: 1,424
