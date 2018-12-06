@@ -1,12 +1,18 @@
 #include <ros/ros.h>
 #include <opencv2/opencv.hpp>
 #include <CameraReader.hpp>
+#include <image_processor.hpp>
 #include <stdio.h>
 
 using namespace cv;
 
+//#define TEST_PICTURE_PATH "camera_reading_test/images/calibration_test_2.jpg"
+#define TEST_PICTURE_PATH "camera_reading_test/images/track_straight.jpg"
+
+
+#define USE_TEST_PICTURE
 #define LOOP_RATE_IN_HERTZ 50
-#define DRAW_GRID
+//#define DRAW_GRID
 
 
 void drawGrid(Mat& mat) {
@@ -18,45 +24,46 @@ void drawGrid(Mat& mat) {
 
 int main(int argc, char** argv)
 {
-  //std::cout << "Hallo erstmal" << std::endl;
   // init this node
   ros::init(argc, argv, "camera_reading_test_node");
-  //std::cout << "after init" << std::endl;
 
-  // get ros node handle
   ros::NodeHandle nh;
-  //std::cout << "after NodeHandle" << std::endl;
+  Mat frame;
 
-
-//   // sensor message container
-//   sensor_msgs::Range usr, usf, usl;
-//   std_msgs::Int16 motor, steering;
-
-//   // generate subscriber for sensor messages
-//   ros::Subscriber usrSub = nh.subscribe<sensor_msgs::Range>(
-//       "/uc_bridge/usr", 10, boost::bind(usrCallback, _1, &usr));
-//   ros::Subscriber uslSub = nh.subscribe<sensor_msgs::Range>(
-//       "/uc_bridge/usl", 10, boost::bind(uslCallback, _1, &usl));
-//   ros::Subscriber usfSub = nh.subscribe<sensor_msgs::Range>(
-//       "/uc_bridge/usf", 10, boost::bind(usfCallback, _1, &usf));
-
-  // generate control message publisher
-
+#ifdef USE_TEST_PICTURE
+  frame = imread(TEST_PICTURE_PATH, IMREAD_COLOR);
+  if (frame.empty()) {
+    ROS_ERROR("Test image could not be opened!");
+  }
+#endif
   ROS_INFO("VIDEO READING TEST");
   char dir_name[100];
   getcwd(dir_name, 100);
   ROS_INFO("Current directory is: %s", dir_name);
 
+#ifndef USE_TEST_PICTURE
   CameraReader reader;
 
 
-  // Loop starts here:
-  // loop rate value is set in Hz
-
   ROS_INFO("FPS: %f", reader.getVideoCapture().get(CV_CAP_PROP_FPS));
   //ROS_INFO("Buffer size: %f", reader.getVideoCapture().get(CV_CAP_PROP_BUFFERSIZE));
+#endif
+  
+  // TODO: for more meaningful testing, move object creation in the loop
+  ImageProcessor imageProcessor(frame);
+  imageProcessor.calibrateCameraImage(59.0,84.0,30.0,
+            Point(0,366),Point(632,363),Point(404,238),Point(237,237),
+            Point(151,639),Point(488,639),Point(488,0),Point(151,0)
+
+  );
+
+  imshow("CameraFrame", frame);
+  waitKey(0);
+
+  frame = imageProcessor.transformTo2D();
+  
   ROS_INFO("Open up window...");
-  namedWindow("CameraFrame", WINDOW_AUTOSIZE);
+  //namedWindow("CameraFrame", WINDOW_AUTOSIZE);
 
   ros::Rate loop_rate(LOOP_RATE_IN_HERTZ);
   while (ros::ok())
@@ -65,17 +72,15 @@ int main(int argc, char** argv)
     //ROS_INFO("Number of frames: %f", reader.getNumberOfFrames());
     
     ROS_INFO("Show frame.");
-    Mat frame = reader.readImage();
+#ifndef USE_TEST_PICTURE
+    frame = reader.readImage();
+#endif
 #ifdef DRAW_GRID
     drawGrid(frame);
 #endif
     imshow("CameraFrame", frame);
     waitKey(1); // set to 0 for manual continuation (key-press) or specify auto-delay in milliseconds
     ROS_INFO("Showed frame.");
-
-    // publish command messages on their topics
-    // side note: setting steering and motor even though nothing might have
-    // changed is actually stupid but for this demo it doesn't matter too much.
 
     // clear input/output buffers
     ros::spinOnce();
