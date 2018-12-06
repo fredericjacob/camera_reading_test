@@ -22,14 +22,15 @@ class ImageProcessor {
          * and in the destination image after applying a perspective transformation to a 2D plane.
          * Order of the points: bottom-left, bottom-right, top-right, top-left
          */
-        void calibrateCameraImage(double testRectWidth_cm, double testRectHeight_cm, double offsetToOrigin_cm, 
+        void calibrateCameraImage(double testRectWidth_cm, double testRectHeight_cm, double offsetToOrigin_cm,
+                                    int targetWidth, int targetHeight,
                                     Point srcP1_px, Point srcP2_px, Point srcP3_px, Point srcP4_px,
                                     Point dstP1_px, Point dstP2_px, Point dstP3_px, Point dstP4_px);
 
         Point2d getWorldCoordinates(Point2i imageCoordinates);
         Point2i getImageCoordinates(Point2d worldCoordinates);
 
-        Mat transformTo2D(int outputWidth, int outputHeight);
+        Mat transformTo2D();
         Mat filterColor();
 
         Mat& getImage();    // TODO: remove? getter not necessary?
@@ -44,6 +45,7 @@ class ImageProcessor {
         Point srcP1, srcP2, srcP3, srcP4, dstP1, dstP2, dstP3, dstP4;
         Point2f srcPoints[4];
         Point2f dstPoints[4];
+        int dstWidth, dstHeight;
 
         // variables for calculating coordinates
         double height_px_per_cm, height_cm_per_px, width_px_per_cm, width_cm_per_px;

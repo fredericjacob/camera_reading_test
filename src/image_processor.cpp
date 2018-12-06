@@ -1,6 +1,7 @@
 #include <image_processor.hpp>
 
-void ImageProcessor::calibrateCameraImage(double testRectWidth_cm, double testRectHeight_cm, double offsetToOrigin_cm, 
+void ImageProcessor::calibrateCameraImage(double testRectWidth_cm, double testRectHeight_cm, double offsetToOrigin_cm,
+                                    int targetWidth, int targetHeight,
                                     Point srcP1_px, Point srcP2_px, Point srcP3_px, Point srcP4_px,
                                     Point dstP1_px, Point dstP2_px, Point dstP3_px, Point dstP4_px) 
 {
@@ -9,10 +10,13 @@ void ImageProcessor::calibrateCameraImage(double testRectWidth_cm, double testRe
     int rect_height_px = dstP1_px.y-dstP4_px.y;   // y-down coordinates
     int rect_width_px = dstP2_px.x-dstP1_px.x;
 
-    px_os_bottom = image.rows-1 - dstP1_px.y;
+    px_os_bottom = targetHeight-1 - dstP1_px.y;
     px_os_top = dstP4_px.y;
     px_os_left = dstP1_px.x;
-    px_os_right = image.cols-1 - dstP2_px.x;
+    px_os_right = targetWidth-1 - dstP2_px.x;
+
+    dstWidth = targetWidth;
+    dstHeight = targetHeight;
 
     height_px_per_cm = rect_height_px/testRectHeight_cm;
     height_cm_per_px = testRectHeight_cm/rect_height_px;
@@ -42,9 +46,9 @@ void ImageProcessor::calibrateCameraImage(double testRectWidth_cm, double testRe
     calibrated = true;
 }
 
-Mat ImageProcessor::transformTo2D(int outputWidth, int outputHeight) {
+Mat ImageProcessor::transformTo2D() {
     Mat transformMatr = getPerspectiveTransform(srcPoints,dstPoints);
-    Mat output = Mat::zeros(Size(outputWidth,outputHeight),image.type());
+    Mat output = Mat::zeros(Size(dstWidth,dstHeight),image.type());
     warpPerspective(image, output, transformMatr, output.size()); // TODO: good idea to write back to the same image? allow a different image size than the original one?
     image = output;
     return image;
@@ -65,9 +69,9 @@ Point2i ImageProcessor::getImageCoordinates(Point2d worldCoordinates) {
     return Point2i(-1,-1);
 }
 
-
+// debugging
 Mat ImageProcessor::drawPoint(Point2i point) {
-    circle(image, point, 2, Scalar(0,0,255), -1);
+    circle(image, point, 4, Scalar(0,0,255), -1);
     return image;
 }
 

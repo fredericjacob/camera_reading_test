@@ -12,18 +12,30 @@ using namespace cv;
 
 
 #define USE_TEST_PICTURE
-#define LOOP_RATE_IN_HERTZ 50
+#define LOOP_RATE_IN_HERTZ 2
 //#define DRAW_GRID
 
-#define PARAMS_1 59.0,84.0,30.0,Point(0,366),Point(632,363),Point(404,238),Point(237,237),Point(151,639),Point(488,639),Point(488,0),Point(151,0)
-#define PARAMS_2 59.0,84.0,20,Point(43,387),Point(583,383),Point(404,189),Point(234,190),Point(95,990),Point(545,990),Point(545,350),Point(95,350)
+#define PARAMS_1 59.0,84.0,30.0,640,480,Point(0,366),Point(632,363),Point(404,238),Point(237,237),Point(151,639),Point(488,639),Point(488,0),Point(151,0)
+#define PARAMS_2 59.0,84.0,20,640,991,Point(43,387),Point(583,383),Point(404,189),Point(234,190),Point(95,990),Point(545,990),Point(545,350),Point(95,350)
 
 
+const Point2i POINT_1 = Point2i(320,0);
+const Point2i POINT_2 = Point2i(320,990);
+const Point2i POINT_3 = Point2i(20,460);
+
+
+// for calibration / centering the car
 void drawGrid(Mat& mat) {
   int width = mat.cols;
   int height = mat.rows;
   line(mat, Point(0, (height-1)/2), Point(width-1, (height-1)/2), Scalar(0,0,255), 1);
   line(mat, Point((width-1)/2, 0), Point((width-1)/2, height-1), Scalar(0,0,255), 1);
+}
+
+// for debugging
+void printWorldCoords(Point2i pxPoint, int pointId, ImageProcessor& proc) {
+  Point2d worldCoords1 = proc.getWorldCoordinates(pxPoint);
+  ROS_INFO("Car coordinates of image point %d (%d,%d): (%f,%f)", pointId, pxPoint.x, pxPoint.y, worldCoords1.x, worldCoords1.y);
 }
 
 int main(int argc, char** argv)
@@ -60,7 +72,7 @@ int main(int argc, char** argv)
   imshow("CameraFrame", frame);
   waitKey(0);
 
-  frame = imageProcessor.transformTo2D(640,991);
+  frame = imageProcessor.transformTo2D();
   
   ROS_INFO("Open up window...");
   //namedWindow("CameraFrame", WINDOW_AUTOSIZE);
@@ -78,6 +90,15 @@ int main(int argc, char** argv)
 #ifdef DRAW_GRID
     drawGrid(frame);
 #endif
+
+    printWorldCoords(POINT_1, 1, imageProcessor);
+    imageProcessor.drawPoint(POINT_1);
+    printWorldCoords(POINT_2, 2, imageProcessor);
+    imageProcessor.drawPoint(POINT_2);
+    printWorldCoords(POINT_3, 3, imageProcessor);
+    frame = imageProcessor.drawPoint(POINT_3);
+
+
     imshow("CameraFrame", frame);
     waitKey(1); // set to 0 for manual continuation (key-press) or specify auto-delay in milliseconds
     ROS_INFO("Showed frame.");
