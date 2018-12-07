@@ -80,18 +80,18 @@ Mat& ImageProcessor::getImage() {
     return image;
 }
 
-Mat ImageProcessor::resize() {
+Mat ImageProcessor::resize(int width, int height) {
     Mat resized;
-    resize(image, resized, Size(800, 450), 0, 0, 5); //size is variable
+    cv::resize(image, resized, Size(width, height), 0, 0, INTER_LINEAR); //size is variable
     image = resized;
     return image;
 }
 
-Mat ImageProcessor::roi() {
-    image = image(Rect(0, 250, 850, 250)); // parameters need to be adjusted
+Mat ImageProcessor::regionOfInterest(int x, int y, int width, int height) {
+    image = image(Rect(x, y, width, height));
     return image;
 }
 
-Mat ImageProcessor::getTranformMatr() {
+Mat ImageProcessor::getTransformMatr() {
     return transformMatr;
 }

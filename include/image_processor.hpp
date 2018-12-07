@@ -32,6 +32,9 @@ class ImageProcessor {
 
         Mat transformTo2D();
         Mat filterColor();
+        Mat resize(int width, int height);
+        Mat regionOfInterest(int x, int y, int width, int height);
+        Mat getTransformMatr();
 
         Mat& getImage();    // TODO: remove? getter not necessary?
 
