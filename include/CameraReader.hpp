@@ -15,7 +15,7 @@ class CameraReader {
 #ifdef DEBUG
             VideoCapture("test.mp4")
 #else
-            VideoCapture(0)
+            VideoCapture()
 #endif
             ){};
         ~CameraReader(){};

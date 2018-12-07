@@ -72,6 +72,12 @@ int main(int argc, char** argv)
   imshow("CameraFrame", frame);
   waitKey(0);
 
+  frame = imageProcessor.resize();
+
+  Mat copy = frame.copy(); // for further imshow and sign detection
+
+  frame = imageProcessor.roi();
+
   frame = imageProcessor.transformTo2D();
   
   ROS_INFO("Open up window...");

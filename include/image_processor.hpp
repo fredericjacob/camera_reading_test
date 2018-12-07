@@ -40,6 +40,7 @@ class ImageProcessor {
 
     private:
         Mat image;
+        Mat transformMatr;
         bool calibrated = false;
 
         Point srcP1, srcP2, srcP3, srcP4, dstP1, dstP2, dstP3, dstP4;
