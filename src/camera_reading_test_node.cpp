@@ -2,6 +2,7 @@
 #include <opencv2/opencv.hpp>
 #include <CameraReader.hpp>
 #include <image_processor.hpp>
+#include <gui/color_selector.hpp>
 #include <stdio.h>
 
 using namespace cv;
@@ -45,6 +46,8 @@ int main(int argc, char** argv)
 
   ros::NodeHandle nh;
   Mat frame;
+
+  ColorSelector colorSelector("green");
 
 #ifdef USE_TEST_PICTURE
   frame = imread(TEST_PICTURE_PATH, IMREAD_COLOR);
@@ -111,6 +114,8 @@ int main(int argc, char** argv)
     printWorldCoords(POINT_3, 3, imageProcessor);
     frame = imageProcessor.drawPoint(POINT_3);
 
+    ROS_INFO("H low: %d", colorSelector.getLowH());
+    ROS_INFO("S high: %d", colorSelector.getHighS());
 
     imshow("CameraFrame", frame);
     waitKey(1); // set to 0 for manual continuation (key-press) or specify auto-delay in milliseconds

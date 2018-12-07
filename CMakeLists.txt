@@ -137,6 +137,7 @@ add_executable(${PROJECT_NAME}_node
                             src/camera_reading_test_node.cpp
                             src/CameraReader.cpp
                             src/image_processor.cpp
+                            src/gui/color_selector.cpp
 )
 
 ## Rename C++ executable without prefix
