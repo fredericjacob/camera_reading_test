@@ -128,7 +128,11 @@ int main(int argc, char** argv)
     ImageProcessor tmpProc(frame, HSV);
     Mat greenFiltered = tmpProc.filterColor(Scalar(colSelGr.getLowH(), colSelGr.getLowS(), colSelGr.getLowV()),
                                             Scalar(colSelGr.getHighH(), colSelGr.getHighS(), colSelGr.getHighV()));
+    greenFiltered = tmpProc.removeNoise(5,5);
     imshow("green", greenFiltered);
+
+    Mat edgesDetected = tmpProc.edgeDetection(colSelGr.getLowCannyThresh(), colSelGr.getHighCannyThresh());
+    imshow("edges detected", greenFiltered);
 
     //imshow("CameraFrame", frame);
     waitKey(1000); // set to 0 for manual continuation (key-press) or specify auto-delay in milliseconds

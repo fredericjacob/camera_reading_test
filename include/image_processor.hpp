@@ -37,6 +37,7 @@ class ImageProcessor {
         Mat convertToHSV();
 
         Mat filterColor(Scalar lowHSVColor, Scalar highHSVColor);
+        Mat edgeDetection(int lowThresh, int highThresh);
 
         Mat removeNoise(int kwidth, int kheight);
         Mat resize(int width, int height);

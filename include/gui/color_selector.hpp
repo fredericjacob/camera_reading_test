@@ -14,6 +14,9 @@ class ColorSelector {
         int getHighS();
         int getHighV();
 
+        int getLowCannyThresh();
+        int getHighCannyThresh();
+
 
         // static ColorSelector getInstance() {
         //     if (&instance==NULL) {
@@ -37,4 +40,6 @@ class ColorSelector {
         int highS;
         int highV;
 
+        int lowCannyThresh;
+        int highCannyThresh;
 };

@@ -59,6 +59,11 @@ Mat ImageProcessor::filterColor(Scalar lowHSVColor, Scalar highHSVColor) {
     return image;
 }
 
+Mat ImageProcessor::edgeDetection(int lowThresh, int highThresh) {
+    Canny(image, image, lowThresh, highThresh);
+    return image;
+}
+
 Point2d ImageProcessor::getWorldCoordinates(Point2i imageCoordinates) {
     Point2i unscaledCoordinates = Point2i(imageCoordinates.x - (image.cols/2), image.rows - imageCoordinates.y - px_os_bottom);
     return Point2d(unscaledCoordinates.x * width_cm_per_px, (unscaledCoordinates.y * height_cm_per_px) + offset_cm);
