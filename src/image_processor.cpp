@@ -54,9 +54,9 @@ Mat ImageProcessor::transformTo2D() {
     return image;
 }
 
-Mat ImageProcessor::filterColor() {
-    // TODO: implement
-    return Mat();
+Mat ImageProcessor::filterColor(Scalar lowHSVColor, Scalar highHSVColor) {
+    inRange(image, lowHSVColor, highHSVColor, image);
+    return image;
 }
 
 Point2d ImageProcessor::getWorldCoordinates(Point2i imageCoordinates) {
@@ -94,4 +94,19 @@ Mat ImageProcessor::regionOfInterest(int x, int y, int width, int height) {
 
 Mat ImageProcessor::getTransformMatr() {
     return transformMatr;
+}
+
+Mat ImageProcessor::removeNoise(int kwidth, int kheight) {
+    blur(image, image, Size(kwidth, kheight));
+    return image;
+}
+
+Mat ImageProcessor::convertToHSV() {
+    if (!colorType==BGR) {
+        std::cerr << "Conversion to HSV not possible!" << std::endl;
+        return image;
+    }
+    cvtColor(image, image, COLOR_BGR2HSV);
+    colorType = HSV;
+    return image;
 }

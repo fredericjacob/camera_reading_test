@@ -13,7 +13,7 @@ using namespace cv;
 
 
 #define USE_TEST_PICTURE
-#define LOOP_RATE_IN_HERTZ 2
+#define LOOP_RATE_IN_HERTZ 10
 //#define DRAW_GRID
 
 #define PARAMS_1 59.0,84.0,30.0,640,480,Point(0,366),Point(632,363),Point(404,238),Point(237,237),Point(151,639),Point(488,639),Point(488,0),Point(151,0)
@@ -69,7 +69,7 @@ int main(int argc, char** argv)
 #endif
   
   // TODO: for more meaningful testing, move object creation in the loop
-  ImageProcessor imageProcessor(frame);
+  ImageProcessor imageProcessor(frame, BGR);
   imageProcessor.calibrateCameraImage(PARAMS_2);
 
   imshow("CameraFrame", frame);
@@ -90,10 +90,10 @@ int main(int argc, char** argv)
   imshow("2D", frame);
   waitKey(0);
   
-  ROS_INFO("Open up window...");
   //namedWindow("CameraFrame", WINDOW_AUTOSIZE);
 
   ros::Rate loop_rate(LOOP_RATE_IN_HERTZ);
+  ROS_INFO("Enter while loop...");
   while (ros::ok())
   {
     //reader.readImage();
@@ -118,7 +118,7 @@ int main(int argc, char** argv)
     ROS_INFO("S high: %d", colorSelector.getHighS());
 
     imshow("CameraFrame", frame);
-    waitKey(1); // set to 0 for manual continuation (key-press) or specify auto-delay in milliseconds
+    waitKey(1000); // set to 0 for manual continuation (key-press) or specify auto-delay in milliseconds
     ROS_INFO("Showed frame.");
 
     // clear input/output buffers

@@ -5,13 +5,15 @@
 
 using namespace cv;
 
+enum ColorType { BGR, HSV, GREY };
+
 /**
  * Image processor to perform multiple operation on OpenCV Mat objects.
  * NOTE: calibrateCameraImage() must have been called in order to use most methods!
  */
 class ImageProcessor {
     public:
-        ImageProcessor(Mat img) : image(img) {};
+        ImageProcessor(Mat img, ColorType type) : image(img), colorType(type) {};
         ~ImageProcessor(){};
         
         /**
@@ -30,11 +32,17 @@ class ImageProcessor {
         Point2d getWorldCoordinates(Point2i imageCoordinates);
         Point2i getImageCoordinates(Point2d worldCoordinates);
 
+        Mat getTransformMatr();
         Mat transformTo2D();
-        Mat filterColor();
+        Mat convertToHSV();
+
+        Mat filterColor(Scalar lowHSVColor, Scalar highHSVColor);
+
+        Mat removeNoise(int kwidth, int kheight);
         Mat resize(int width, int height);
         Mat regionOfInterest(int x, int y, int width, int height);
-        Mat getTransformMatr();
+        //Mat convertToGrayscale();
+
 
         Mat& getImage();    // TODO: remove? getter not necessary?
 
@@ -44,6 +52,7 @@ class ImageProcessor {
     private:
         Mat image;
         Mat transformMatr;
+        ColorType colorType;
         bool calibrated = false;
 
         Point srcP1, srcP2, srcP3, srcP4, dstP1, dstP2, dstP3, dstP4;
