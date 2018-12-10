@@ -47,7 +47,7 @@ int main(int argc, char** argv)
   ros::NodeHandle nh;
   Mat frame;
 
-  ColorSelector colorSelector("green");
+  ColorSelector colSelGr("greenSelector");
 
 #ifdef USE_TEST_PICTURE
   frame = imread(TEST_PICTURE_PATH, IMREAD_COLOR);
@@ -75,6 +75,7 @@ int main(int argc, char** argv)
   imshow("CameraFrame", frame);
   waitKey(0);
 
+/*
   frame = imageProcessor.resize(800,450);
   imshow("resized", frame);
   waitKey(0);
@@ -85,9 +86,15 @@ int main(int argc, char** argv)
   frame = imageProcessor.regionOfInterest(0,0,600,400);
   imshow("region of interest", frame);
   waitKey(0);
+*/
+
 
   frame = imageProcessor.transformTo2D();
   imshow("2D", frame);
+
+  frame = imageProcessor.removeNoise(5,5);
+  imshow("2D denoised", frame);
+  
   waitKey(0);
   
   //namedWindow("CameraFrame", WINDOW_AUTOSIZE);
@@ -107,17 +114,23 @@ int main(int argc, char** argv)
     drawGrid(frame);
 #endif
 
+/*
     printWorldCoords(POINT_1, 1, imageProcessor);
     imageProcessor.drawPoint(POINT_1);
     printWorldCoords(POINT_2, 2, imageProcessor);
     imageProcessor.drawPoint(POINT_2);
     printWorldCoords(POINT_3, 3, imageProcessor);
     frame = imageProcessor.drawPoint(POINT_3);
+*/
+    ROS_INFO("H low: %d", colSelGr.getLowH());
+    ROS_INFO("S high: %d", colSelGr.getHighS());
 
-    ROS_INFO("H low: %d", colorSelector.getLowH());
-    ROS_INFO("S high: %d", colorSelector.getHighS());
+    ImageProcessor tmpProc(frame, HSV);
+    Mat greenFiltered = tmpProc.filterColor(Scalar(colSelGr.getLowH(), colSelGr.getLowS(), colSelGr.getLowV()),
+                                            Scalar(colSelGr.getHighH(), colSelGr.getHighS(), colSelGr.getHighV()));
+    imshow("green", greenFiltered);
 
-    imshow("CameraFrame", frame);
+    //imshow("CameraFrame", frame);
     waitKey(1000); // set to 0 for manual continuation (key-press) or specify auto-delay in milliseconds
     ROS_INFO("Showed frame.");
 
