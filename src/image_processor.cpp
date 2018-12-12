@@ -45,6 +45,28 @@ void ImageProcessor::calibrateCameraImage(double testRectWidth_cm, double testRe
 
     calibrated = true;
 }
+void ImageProcessor::calibrateCameraImage(double testRectWidth_cm, double testRectHeight_cm, double offsetToOrigin_cm,
+                                    int targetWidth_cm, int targetHeight_cm,
+                                    Point srcP1_px, Point srcP2_px, Point srcP3_px, Point srcP4_px,
+                                    double px_per_cm)
+{
+    int dstWidth_px = targetWidth_cm * px_per_cm;
+    int dstHeight_px = targetHeight_cm * px_per_cm;
+
+    int testRectWidth_px = testRectWidth_cm * px_per_cm;
+    int testRectHeight_px = testRectHeight_cm * px_per_cm;
+
+    // "place" test rectangle in the center (bottom) of the image
+    Point dstP1_px = Point((dstWidth_px/2)-(testRectWidth_px/2), dstHeight_px-1);
+    Point dstP2_px = Point((dstWidth_px/2)+(testRectWidth_px/2), dstHeight_px-1);
+    Point dstP3_px = Point((dstWidth_px/2)+(testRectWidth_px/2), dstHeight_px-1-testRectHeight_px);
+    Point dstP4_px = Point((dstWidth_px/2)-(testRectWidth_px/2), dstHeight_px-1-testRectHeight_px);
+
+    return calibrateCameraImage(testRectWidth_cm, testRectHeight_cm, offsetToOrigin_cm,
+                                dstWidth_px, dstHeight_px,
+                                srcP1_px, srcP2_px, srcP3_px, srcP4_px,
+                                dstP1_px, dstP2_px, dstP3_px, dstP4_px);
+}
 
 Mat ImageProcessor::transformTo2D() {
     transformMatr = getPerspectiveTransform(srcPoints,dstPoints);

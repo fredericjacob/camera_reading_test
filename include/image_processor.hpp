@@ -28,6 +28,13 @@ class ImageProcessor {
                                     int targetWidth, int targetHeight,
                                     Point srcP1_px, Point srcP2_px, Point srcP3_px, Point srcP4_px,
                                     Point dstP1_px, Point dstP2_px, Point dstP3_px, Point dstP4_px);
+        /**
+         * determines the size of the target image automatically, placing the test rectangle at the bottom of the image
+         */
+        void calibrateCameraImage(double testRectWidth_cm, double testRectHeight_cm, double offsetToOrigin_cm,
+                                    int targetWidth_cm, int targetHeight_cm,
+                                    Point srcP1_px, Point srcP2_px, Point srcP3_px, Point srcP4_px,
+                                    double px_per_cm);
 
         Point2d getWorldCoordinates(Point2i imageCoordinates);
         Point2i getImageCoordinates(Point2d worldCoordinates);

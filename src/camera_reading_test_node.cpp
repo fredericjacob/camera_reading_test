@@ -9,7 +9,8 @@ using namespace cv;
 
 //#define TEST_PICTURE_PATH "camera_reading_test/images/calibration_test_2.jpg"
 //#define TEST_PICTURE_PATH "camera_reading_test/images/track_straight.jpg"
-#define TEST_PICTURE_PATH "camera_reading_test/images/track_calibration_1.jpg"
+//#define TEST_PICTURE_PATH "camera_reading_test/images/track_calibration_1.jpg"
+#define TEST_PICTURE_PATH "camera_reading_test/images/my_photo-2.jpg"
 
 
 #define USE_TEST_PICTURE
@@ -18,6 +19,9 @@ using namespace cv;
 
 #define PARAMS_1 59.0,84.0,30.0,640,480,Point(0,366),Point(632,363),Point(404,238),Point(237,237),Point(151,639),Point(488,639),Point(488,0),Point(151,0)
 #define PARAMS_2 59.0,84.0,20,640,991,Point(43,387),Point(583,383),Point(404,189),Point(234,190),Point(95,990),Point(545,990),Point(545,350),Point(95,350)
+
+// my_photo-2.jpg
+#define PARAMS_3 59.0,84.0,20,180,180,Point(549,799),Point(1384,786),Point(1129,490),Point(800,493),5
 
 
 const Point2i POINT_1 = Point2i(320,0);
@@ -70,7 +74,8 @@ int main(int argc, char** argv)
   
   // TODO: for more meaningful testing, move object creation in the loop
   ImageProcessor imageProcessor(frame, BGR);
-  imageProcessor.calibrateCameraImage(PARAMS_2);
+  //imageProcessor.calibrateCameraImage(PARAMS_2);
+  imageProcessor.calibrateCameraImage(PARAMS_3);
 
   imshow("CameraFrame", frame);
   waitKey(0);
