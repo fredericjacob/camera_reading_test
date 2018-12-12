@@ -47,6 +47,14 @@ class ImageProcessor {
 
         Mat& getImage();    // TODO: remove? getter not necessary?
 
+
+        // methods for getting trajectory points
+        
+        /**
+         * pxHeight is the distance of the desired point to
+         */
+        Point2i singleTrajPoint(int pxHeight, int pxDistLane);
+
         // debugging methods
         Mat drawPoint(Point2i point);
 

@@ -131,9 +131,12 @@ int main(int argc, char** argv)
     greenFiltered = tmpProc.removeNoise(5,5);
     imshow("green", greenFiltered);
 
+    Point2i trajPoint = tmpProc.singleTrajPoint(150, 300);
+    imshow("traj point", tmpProc.drawPoint(trajPoint));
+/*
     Mat edgesDetected = tmpProc.edgeDetection(colSelGr.getLowCannyThresh(), colSelGr.getHighCannyThresh());
     imshow("edges detected", greenFiltered);
-
+*/
     //imshow("CameraFrame", frame);
     waitKey(1000); // set to 0 for manual continuation (key-press) or specify auto-delay in milliseconds
     ROS_INFO("Showed frame.");

@@ -76,7 +76,7 @@ Point2i ImageProcessor::getImageCoordinates(Point2d worldCoordinates) {
 
 // debugging
 Mat ImageProcessor::drawPoint(Point2i point) {
-    circle(image, point, 4, Scalar(0,0,255), -1);
+    circle(image, point, 4, Scalar(255,255,255), -1);
     return image;
 }
 
@@ -114,4 +114,19 @@ Mat ImageProcessor::convertToHSV() {
     cvtColor(image, image, COLOR_BGR2HSV);
     colorType = HSV;
     return image;
+}
+
+Point2i ImageProcessor::singleTrajPoint(int pxHeight, int pxDistLane) {
+    int y = image.rows - pxHeight;
+    int width = image.cols;
+    Mat imageRow = image.row(y);
+    for (int i=width-1; i>=0; i--) {
+        Scalar pixel = imageRow.at<uchar>(0,i);
+
+        if (pixel.val[0]!=0) {
+            return Point2i(i-pxDistLane,y);
+        }
+    }
+    std::cerr << "No trajectory point found." << std::endl;
+    return Point2i(-1,-1);
 }

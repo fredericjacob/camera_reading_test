@@ -32,13 +32,13 @@ class ColorSelector {
 
         // static ColorSelector instance;
 
-        int lowH;
-        int lowS;
-        int lowV;
+        int lowH = 70;
+        int lowS = 126;
+        int lowV = 11;
 
-        int highH;
-        int highS;
-        int highV;
+        int highH = 132;
+        int highS = 255;
+        int highV = 118;
 
         int lowCannyThresh;
         int highCannyThresh;
