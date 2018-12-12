@@ -53,14 +53,15 @@ class ImageProcessor {
 
 
         Mat& getImage();    // TODO: remove? getter not necessary?
+        void setImage(Mat img, ColorType type); // TODO: remove this method later when testing is over!
 
 
         // methods for getting trajectory points
         
         /**
-         * pxHeight is the distance of the desired point to
+         * Calculates a single (inaccurate) trajectory point by using a fixed distance to the right lane in the given distance (y_cm).
          */
-        Point2i singleTrajPoint(int pxHeight, int pxDistLane);
+        Point2i singleTrajPoint(int rightLaneDist_cm, int y_cm);
 
         // debugging methods
         Mat drawPoint(Point2i point);

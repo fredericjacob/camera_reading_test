@@ -138,7 +138,15 @@ Mat ImageProcessor::convertToHSV() {
     return image;
 }
 
-Point2i ImageProcessor::singleTrajPoint(int pxHeight, int pxDistLane) {
+void ImageProcessor::setImage(Mat img, ColorType type) {
+    image = img;
+    colorType = type;
+}
+
+Point2i ImageProcessor::singleTrajPoint(int rightLaneDist_cm, int y_cm) {
+    int pxHeight = (y_cm - offset_cm) * height_px_per_cm;
+    int pxDistLane = rightLaneDist_cm * width_px_per_cm;
+
     int y = image.rows - pxHeight;
     int width = image.cols;
     Mat imageRow = image.row(y);

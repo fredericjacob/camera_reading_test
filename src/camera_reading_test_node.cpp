@@ -130,16 +130,17 @@ int main(int argc, char** argv)
     ROS_INFO("H low: %d", colSelGr.getLowH());
     ROS_INFO("S high: %d", colSelGr.getHighS());
 
-    ImageProcessor tmpProc(frame, HSV);
-    Mat greenFiltered = tmpProc.filterColor(Scalar(colSelGr.getLowH(), colSelGr.getLowS(), colSelGr.getLowV()),
+    imageProcessor.setImage(frame, HSV);
+    Mat greenFiltered = imageProcessor.filterColor(Scalar(colSelGr.getLowH(), colSelGr.getLowS(), colSelGr.getLowV()),
                                             Scalar(colSelGr.getHighH(), colSelGr.getHighS(), colSelGr.getHighV()));
-    greenFiltered = tmpProc.removeNoise(5,5);
+    greenFiltered = imageProcessor.removeNoise(5,5);
     imshow("green", greenFiltered);
 
-    Point2i trajPoint = tmpProc.singleTrajPoint(150, 300);
-    imshow("traj point", tmpProc.drawPoint(trajPoint));
+    Point2i trajPoint = imageProcessor.singleTrajPoint(40, 100);
+    ROS_INFO("Calculated traj point.");
+    imshow("traj point", imageProcessor.drawPoint(trajPoint));
 /*
-    Mat edgesDetected = tmpProc.edgeDetection(colSelGr.getLowCannyThresh(), colSelGr.getHighCannyThresh());
+    Mat edgesDetected = imageProcessor.edgeDetection(colSelGr.getLowCannyThresh(), colSelGr.getHighCannyThresh());
     imshow("edges detected", greenFiltered);
 */
     //imshow("CameraFrame", frame);
